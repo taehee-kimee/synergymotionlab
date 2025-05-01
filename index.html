@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synergy Motion Lab</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="controls-panel">
+        <div class="controls-header">
+            <h1>Synergy Motion Lab</h1>
+        </div>
+        <div class="controls-content">
+            <div class="motion-container">
+                <div class="control-group">
+                    <label for="motion-type">Motion Start Type</label>
+                    <select id="motion-type">
+                        <option value="slide">Slide In</option>
+                        <option value="fade">Fade In</option>
+                        <option value="zoom">Zoom In</option>
+                    </select>
+                </div>
+
+                <div class="motion-start-group">
+                    <div class="control-group">
+                        <label for="start-easing">Start Easing Function</label>
+                        <select id="start-easing">
+                            <option value="linear">linear</option>
+                            <option value="ease">ease</option>
+                            <option value="ease-in">ease-in</option>
+                            <option value="ease-out">ease-out</option>
+                            <option value="ease-in-out">ease-in-out</option>
+                            <option value="cubic-bezier">cubic-bezier</option>
+                        </select>
+                        <div class="easing-value-container" id="start-easing-container">
+                            <div id="start-linear-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0, 0, 1, 1)" readonly>
+                            </div>
+                            <div id="start-ease-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.25, 0.1, 0.25, 1)" readonly>
+                            </div>
+                            <div id="start-ease-in-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.42, 0, 1, 1)" readonly>
+                            </div>
+                            <div id="start-ease-out-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0, 0, 0.58, 1)" readonly>
+                            </div>
+                            <div id="start-ease-in-out-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.42, 0, 0.58, 1)" readonly>
+                            </div>
+                            <div id="start-cubic-bezier-inputs" class="cubic-bezier-inputs" style="display: none;">
+                                <div class="bezier-inputs">
+                                    <input type="number" id="start-bezier-x1" min="0" max="1" step="0.1" value="0.4" placeholder="X1">
+                                    <input type="number" id="start-bezier-y1" min="0" max="1" step="0.1" value="0" placeholder="Y1">
+                                    <input type="number" id="start-bezier-x2" min="0" max="1" step="0.1" value="0.2" placeholder="X2">
+                                    <input type="number" id="start-bezier-y2" min="0" max="1" step="0.1" value="1" placeholder="Y2">
+                                </div>
+                                <div class="bezier-graph">
+                                    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                                        <rect class="graph-background" x="0" y="0" width="100" height="100" />
+                                        <line class="grid-line" x1="0" y1="0" x2="100" y2="0" />
+                                        <line class="grid-line" x1="0" y1="25" x2="100" y2="25" />
+                                        <line class="grid-line" x1="0" y1="50" x2="100" y2="50" />
+                                        <line class="grid-line" x1="0" y1="75" x2="100" y2="75" />
+                                        <line class="grid-line" x1="0" y1="100" x2="100" y2="100" />
+                                        <line class="grid-line" x1="0" y1="0" x2="0" y2="100" />
+                                        <line class="grid-line" x1="25" y1="0" x2="25" y2="100" />
+                                        <line class="grid-line" x1="50" y1="0" x2="50" y2="100" />
+                                        <line class="grid-line" x1="75" y1="0" x2="75" y2="100" />
+                                        <line class="grid-line" x1="100" y1="0" x2="100" y2="100" />
+                                        <path class="bezier-curve" d="" />
+                                        <circle class="control-point" id="start-p0" cx="0" cy="100" r="3" />
+                                        <circle class="control-point" id="start-p1" cx="40" cy="100" r="3" />
+                                        <circle class="control-point" id="start-p2" cx="20" cy="0" r="3" />
+                                        <circle class="control-point" id="start-p3" cx="100" cy="0" r="3" />
+                                        <line class="control-line" id="start-l1" x1="0" y1="100" x2="40" y2="100" />
+                                        <line class="control-line" id="start-l2" x1="20" y1="0" x2="100" y2="0" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="start-duration">Start Duration (ms)</label>
+                        <input type="number" id="start-duration" value="300" min="100" max="5000" step="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="motion-container end-motion-container">
+                <div class="toggle-container">
+                    <input type="checkbox" id="use-end-motion" class="checkbox-input">
+                    <label for="use-end-motion" class="checkbox-label">Use End Motion</label>
+                </div>
+
+                <div class="motion-end-group" style="display: none;">
+                    <div class="control-group">
+                        <label for="motion-end-type">Motion End Type</label>
+                        <select id="motion-end-type">
+                            <option value="slide">Slide Out</option>
+                            <option value="fade">Fade Out</option>
+                            <option value="zoom">Zoom Out</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="end-easing">End Easing Function</label>
+                        <select id="end-easing">
+                            <option value="linear">linear</option>
+                            <option value="ease">ease</option>
+                            <option value="ease-in">ease-in</option>
+                            <option value="ease-out">ease-out</option>
+                            <option value="ease-in-out">ease-in-out</option>
+                            <option value="cubic-bezier">cubic-bezier</option>
+                        </select>
+                        <div class="easing-value-container" id="end-easing-container">
+                            <div id="end-linear-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0, 0, 1, 1)" readonly>
+                            </div>
+                            <div id="end-ease-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.25, 0.1, 0.25, 1)" readonly>
+                            </div>
+                            <div id="end-ease-in-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.42, 0, 1, 1)" readonly>
+                            </div>
+                            <div id="end-ease-out-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0, 0, 0.58, 1)" readonly>
+                            </div>
+                            <div id="end-ease-in-out-value" class="easing-value">
+                                <input type="text" value="cubic-bezier(0.42, 0, 0.58, 1)" readonly>
+                            </div>
+                            <div id="end-cubic-bezier-inputs" class="cubic-bezier-inputs" style="display: none;">
+                                <div class="bezier-inputs">
+                                    <input type="number" id="end-bezier-x1" min="0" max="1" step="0.1" value="0.4" placeholder="X1">
+                                    <input type="number" id="end-bezier-y1" min="0" max="1" step="0.1" value="0" placeholder="Y1">
+                                    <input type="number" id="end-bezier-x2" min="0" max="1" step="0.1" value="0.2" placeholder="X2">
+                                    <input type="number" id="end-bezier-y2" min="0" max="1" step="0.1" value="1" placeholder="Y2">
+                                </div>
+                                <div class="bezier-graph">
+                                    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                                        <rect class="graph-background" x="0" y="0" width="100" height="100" />
+                                        <line class="grid-line" x1="0" y1="0" x2="100" y2="0" />
+                                        <line class="grid-line" x1="0" y1="25" x2="100" y2="25" />
+                                        <line class="grid-line" x1="0" y1="50" x2="100" y2="50" />
+                                        <line class="grid-line" x1="0" y1="75" x2="100" y2="75" />
+                                        <line class="grid-line" x1="0" y1="100" x2="100" y2="100" />
+                                        <line class="grid-line" x1="0" y1="0" x2="0" y2="100" />
+                                        <line class="grid-line" x1="25" y1="0" x2="25" y2="100" />
+                                        <line class="grid-line" x1="50" y1="0" x2="50" y2="100" />
+                                        <line class="grid-line" x1="75" y1="0" x2="75" y2="100" />
+                                        <line class="grid-line" x1="100" y1="0" x2="100" y2="100" />
+                                        <path class="bezier-curve" d="" />
+                                        <circle class="control-point" id="end-p0" cx="0" cy="100" r="3" />
+                                        <circle class="control-point" id="end-p1" cx="40" cy="100" r="3" />
+                                        <circle class="control-point" id="end-p2" cx="20" cy="0" r="3" />
+                                        <circle class="control-point" id="end-p3" cx="100" cy="0" r="3" />
+                                        <line class="control-line" id="end-l1" x1="0" y1="100" x2="40" y2="100" />
+                                        <line class="control-line" id="end-l2" x1="20" y1="0" x2="100" y2="0" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="end-duration">End Duration (ms)</label>
+                        <input type="number" id="end-duration" value="300" min="100" max="5000" step="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="preview-distance">Distance (px)</label>
+                <input type="number" id="preview-distance" value="100" min="50" max="500" step="10">
+            </div>
+
+            <div class="control-group">
+                <div class="preview-header">
+                    <label>Preview Property</label>
+                    <div class="upload-container">
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        <label for="image-upload" class="upload-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </label>
+                    </div>
+                </div>
+                <div class="preview-inputs">
+                    <div class="preview-input-group" id="size-inputs">
+                        <label>Width (px): <input type="number" id="preview-width" value="50" min="20" max="200" step="10"></label>
+                    </div>
+                    <div class="preview-input-group">
+                        <label>Height (px): <input type="number" id="preview-height" value="50" min="20" max="200" step="10"></label>
+                    </div>
+                </div>
+                <div class="image-info" style="display: none;">
+                    <div class="image-name"></div>
+                    <button class="remove-image">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button class="run-button">Run</button>
+        </div>
+    </div>
+    
+    <div class="animation-area">
+        <div class="animated-element"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

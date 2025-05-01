@@ -1,0 +1,466 @@
+:root {
+    --primary-color: #6A0DAD;
+    --bg-color: rgba(240, 240, 240, 0.109);
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-color: #666;
+    --input-bg: #f7f7f7;
+    --input-border: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    color: var(--text-color);
+    display: flex;
+    height: 100vh;
+}
+
+.animation-area {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.animated-element {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    position: absolute;
+    left: 100px;
+    top: 50%;
+    transform: translateY(-50%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(106, 13, 173, 0.3);
+}
+
+.controls-panel {
+    width: 320px;
+    height: 100vh;
+    background: #f5f5f5;
+    border-right: 1px solid var(--glass-border);
+    border-radius: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 10px;
+}
+
+.controls-header h1 {
+    font-size: 20px;
+    font-weight: 200;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.controls-content {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 60px;
+}
+
+.motion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkbox-input:checked {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-input:checked::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-label {
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+}
+
+.end-motion-container {
+    transition: all 0.3s ease;
+}
+
+.end-motion-container.visible {
+    display: flex;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.motion-start-group,
+.motion-end-group {
+    background: rgba(0, 0, 0, 0.03);
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* motion type과 그룹 사이의 간격 조정 */
+.control-group + .motion-start-group,
+.control-group + .motion-end-group {
+    margin-top: 8px;
+}
+
+.motion-start-group .control-group,
+.motion-end-group .control-group {
+    margin-bottom: 0;
+}
+
+.motion-start-group .control-group:last-child,
+.motion-end-group .control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-group label {
+    font-size: 12px;
+    color: var(--text-color);
+    font-weight: 400;
+}
+
+.control-group input,
+.control-group select {
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: 14px;
+    color: var(--text-color);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.control-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.control-group input:focus,
+.control-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(106, 13, 173, 0.3);
+}
+
+.preview-inputs {
+    background: rgba(0, 0, 0, 0.03);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.preview-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.preview-input-group label {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.preview-input-group input {
+    width: 70px !important;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: 14px;
+    text-align: left;
+    color: var(--text-color);
+}
+
+.run-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #222;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 10;
+    border-top: 1px solid var(--glass-border);
+}
+
+
+.run-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(106, 13, 173, 0.4);
+}
+/* 
+.easing-value-container {
+    margin-top: 6px;
+} */
+
+.easing-value {
+    display: none;
+    margin-bottom: 8px;
+}
+
+.easing-value input {
+    font-family: monospace;
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: default;
+    padding: 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    width: 100%;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.cubic-bezier-inputs {
+    padding: 8px;
+    background: var(--input-bg);
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.bezier-inputs {
+    display: flex;
+    gap: 8px;
+}
+
+.bezier-inputs input {
+    width: 100% !important;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.bezier-graph {
+    margin-top: 10px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    /* padding: 16px; */
+    aspect-ratio: 1;
+}
+
+.bezier-graph svg {
+    width: 100%;
+    height: 100%;
+}
+
+.graph-background {
+    fill: var(--input-bg);
+}
+
+.grid-line {
+    stroke: var(--input-border);
+    stroke-width: 0.5;
+}
+
+.bezier-curve {
+    fill: none;
+    stroke: var(--primary-color);
+    stroke-width: 1;
+}
+
+.control-point {
+    fill: var(--primary-color);
+    stroke: white;
+    stroke-width: 1;
+    cursor: move;
+}
+
+/* 양 끝의 control point 숨기기 */
+#p0, #p3 {
+    display: none;
+}
+
+.control-line {
+    stroke: var(--primary-color);
+    stroke-width: 1;
+    stroke-dasharray: 4;
+}
+
+.control-group input.error {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+.control-group input.error:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.upload-container {
+    position: relative;
+}
+
+.upload-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--input-bg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-button:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.upload-button:hover svg {
+    stroke: white;
+}
+
+.upload-button svg {
+    transition: all 0.3s ease;
+}
+
+.image-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+    margin-top: 8px;
+}
+
+.image-name {
+    font-size: 14px;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.remove-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.remove-image:hover {
+    color: #ff4444;
+}
+
+.remove-image svg {
+    width: 16px;
+    height: 16px;
+} 
