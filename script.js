@@ -210,15 +210,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // 시작 모션 타입에 따른 속성 설정
         switch(motionType) {
             case 'slide':
-                element.style.left = `calc(100px + ${distance}px)`;
+                element.style.left = `calc(50% - ${previewWidth.value/2}px + ${distance}px)`;
                 break;
             case 'fade':
                 element.style.opacity = '1';
-                element.style.left = distance && distance !== '0' ? `calc(100px + ${distance}px)` : '100px';
+                element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
                 break;
             case 'zoom':
                 element.style.transform = 'translateY(-50%) scale(1)';
-                element.style.left = distance && distance !== '0' ? `calc(100px + ${distance}px)` : '100px';
+                element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
                 break;
         }
 
@@ -248,22 +248,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 endEasingValue = easingInput.value;
             }
 
-            // 끝 애니메이션
+            // 끝 애니메이션 설정
             setTimeout(() => {
                 element.style.transition = `all ${endDuration}ms ${endEasingValue}`;
                 
                 // 끝 모션 타입에 따른 속성 설정
                 switch(motionEndType) {
-                    case 'slide':
-                        element.style.left = '100px';
-                        break;
                     case 'fade':
                         element.style.opacity = '0';
-                        element.style.left = '100px';
+                        element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
                         break;
                     case 'zoom':
                         element.style.transform = 'translateY(-50%) scale(0)';
-                        element.style.left = '100px';
+                        element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
                         break;
                 }
             }, startDuration);
