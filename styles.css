@@ -12,6 +12,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 }
 
 html, body {
@@ -96,10 +97,11 @@ body {
 .controls-content {
     padding: 0 20px;
     display: flex;
+    height: 100%;
     flex-direction: column;
     gap: 20px;
     flex: 1;
-    overflow-y: auto;
+    overflow: auto;
     margin-bottom: 60px;
 }
 
@@ -191,15 +193,15 @@ body {
 
 .control-group label {
     font-size: 12px;
-    color: var(--text-color);
+    color: #666;
     font-weight: 400;
 }
 
 .control-group input,
 .control-group select {
-    padding: 12px;
+    padding: 8px;
     border: 1px solid var(--input-border);
-    border-radius: 10px;
+    border-radius: 6px;
     background: var(--input-bg);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -221,39 +223,50 @@ body {
 .control-group input:focus,
 .control-group select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(106, 13, 173, 0.3);
+    border-color: #666;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .preview-inputs {
     background: rgba(0, 0, 0, 0.03);
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     padding-left: 16px;
     padding-right: 16px;
-    gap: 6px;
+    gap: 16px;
     border-radius: 10px;
-    border: 1px solid var(--input-border);
     display: flex;
-    flex-direction: column;
+    flex-direction: grid;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
 
 .preview-input-group {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
 }
 
 .preview-input-group label {
-    flex: 1;
-    font-size: 14px;
-    color: var(--text-color);
+    font-size: 12px;
+    color: #666;
 }
 
 .preview-input-group input {
-    width: 70px !important;
+    width: 100% !important;
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 8px;
@@ -348,10 +361,6 @@ body {
     display: none;
 }
 
-/* 
-.easing-value-container {
-    margin-top: 6px;
-} */
 
 .easing-value {
     display: none;
@@ -369,6 +378,19 @@ body {
     width: 100%;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+}
+
+.easing-value input[readonly] {
+    background: #f0f0f0;
+    color: #999;
+    pointer-events: none;
+    user-select: none;
+}
+
+.easing-value input[readonly]:focus {
+    outline: none;
+    border-color: var(--input-border);
+    box-shadow: none;
 }
 
 .cubic-bezier-inputs {
@@ -396,6 +418,7 @@ body {
     -webkit-backdrop-filter: blur(5px);
     font-size: 14px;
     color: var(--text-color);
+    cursor: text;
 }
 
 .bezier-graph {
@@ -423,26 +446,27 @@ body {
 
 .bezier-curve {
     fill: none;
-    stroke: var(--primary-color);
+    stroke: #222;
     stroke-width: 1;
 }
 
 .control-point {
-    fill: var(--primary-color);
-    stroke: white;
+    fill: #222;
+    stroke: #222;
     stroke-width: 1;
     cursor: move;
+    r: 2;
 }
 
 /* 양 끝의 control point 숨기기 */
-#p0, #p3 {
+#start-p0, #start-p3, #end-p0, #end-p3 {
     display: none;
 }
 
 .control-line {
-    stroke: var(--primary-color);
+    stroke: #222;
     stroke-width: 1;
-    stroke-dasharray: 4;
+    stroke-dasharray: 2;
 }
 
 .control-group input.error {
@@ -455,12 +479,6 @@ body {
     box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
 }
 
-.preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .upload-container {
     position: relative;
 }
@@ -469,25 +487,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
     background: var(--input-bg);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .upload-button:hover {
-    background: var(--primary-color);
+    background: #e5e5e5;
     border-color: var(--primary-color);
 }
 
 .upload-button:hover svg {
-    stroke: white;
+    stroke: #222;
+    width: 14px;
+    height: 14px;
 }
 
 .upload-button svg {
     transition: all 0.3s ease;
+    width: 14px;
+    height: 14px;
 }
 
 .image-info {
@@ -542,6 +564,19 @@ body {
     background: #333;
     border-radius: 4px;
     overflow: hidden;
+}
+
+.zoom-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    color: white;
+    font-size: 12px;
+    background: #333;
+    min-width: 44px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .zoom-button {

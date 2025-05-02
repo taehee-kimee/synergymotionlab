@@ -358,16 +358,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const zoomOutButton = document.querySelector('.zoom-out');
     const zoomInButton = document.querySelector('.zoom-in');
     const animationArea = document.querySelector('.animation-area');
+    const zoomValue = document.querySelector('.zoom-value');
 
     zoomOutButton.addEventListener('click', () => {
         if (!animationArea.classList.contains('zoomed-out')) {
             animationArea.classList.add('zoomed-out');
+            zoomValue.textContent = '50%';
         }
     });
 
     zoomInButton.addEventListener('click', () => {
         if (animationArea.classList.contains('zoomed-out')) {
             animationArea.classList.remove('zoomed-out');
+            zoomValue.textContent = '100%';
         }
     });
 });
