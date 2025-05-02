@@ -173,6 +173,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Run 버튼 상태 업데이트 함수
+    function updateRunButtonState() {
+        const motionType = document.getElementById('motion-type').value;
+        const distance = document.getElementById('preview-distance').value;
+        const runButton = document.querySelector('.run-button');
+
+        if (motionType === 'slide' && (!distance || distance === '0')) {
+            runButton.disabled = true;
+        } else {
+            runButton.disabled = false;
+        }
+    }
+
+    // 모션 타입 변경 시 Run 버튼 상태 업데이트
+    motionTypeSelect.addEventListener('change', updateRunButtonState);
+    
+    // distance 입력 시 Run 버튼 상태 업데이트
+    document.getElementById('preview-distance').addEventListener('input', function() {
+        this.classList.remove('error');
+        updateRunButtonState();
+    });
+
     button.addEventListener('click', function() {
         const element = document.querySelector('.animated-element');
         const distance = document.getElementById('preview-distance').value;
@@ -180,13 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const startDuration = document.getElementById('start-duration').value;
         const motionType = document.getElementById('motion-type').value;
         const useEndMotion = document.getElementById('use-end-motion').checked;
-
-        // Slide in의 경우 distance가 필수값
-        if (motionType === 'slide' && (!distance || distance === '0')) {
-            const distanceInput = document.getElementById('preview-distance');
-            distanceInput.classList.add('error');
-            return;
-        }
 
         // 시작 easing 값 계산
         let startEasingValue = startEasing;
@@ -210,15 +225,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // 시작 모션 타입에 따른 속성 설정
         switch(motionType) {
             case 'slide':
-                element.style.left = `calc(50% - ${previewWidth.value/2}px + ${distance}px)`;
+                element.style.left = `${100 + parseInt(distance)}px`;
                 break;
             case 'fade':
                 element.style.opacity = '1';
-                element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
+                if (distance && distance !== '0') {
+                    element.style.left = `${100 + parseInt(distance)}px`;
+                } else {
+                    element.style.left = '100px';
+                }
                 break;
             case 'zoom':
                 element.style.transform = 'translateY(-50%) scale(1)';
-                element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
+                if (distance && distance !== '0') {
+                    element.style.left = `${100 + parseInt(distance)}px`;
+                } else {
+                    element.style.left = '100px';
+                }
                 break;
         }
 
@@ -227,13 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const endEasing = document.getElementById('end-easing').value;
             const endDuration = document.getElementById('end-duration').value;
             const motionEndType = document.getElementById('motion-end-type').value;
-
-            // Slide out의 경우 distance가 필수값
-            if (motionEndType === 'slide' && (!distance || distance === '0')) {
-                const distanceInput = document.getElementById('preview-distance');
-                distanceInput.classList.add('error');
-                return;
-            }
 
             // 끝 easing 값 계산
             let endEasingValue = endEasing;
@@ -256,21 +272,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 switch(motionEndType) {
                     case 'fade':
                         element.style.opacity = '0';
-                        element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
+                        if (distance && distance !== '0') {
+                            element.style.left = `${100 + parseInt(distance)}px`;
+                        } else {
+                            element.style.left = '100px';
+                        }
                         break;
                     case 'zoom':
                         element.style.transform = 'translateY(-50%) scale(0)';
-                        element.style.left = distance && distance !== '0' ? `calc(50% - ${previewWidth.value/2}px + ${distance}px)` : `calc(50% - ${previewWidth.value/2}px)`;
+                        if (distance && distance !== '0') {
+                            element.style.left = `${100 + parseInt(distance)}px`;
+                        } else {
+                            element.style.left = '100px';
+                        }
                         break;
                 }
             }, startDuration);
         }
     });
 
-    // distance input의 error 클래스 제거
-    document.getElementById('preview-distance').addEventListener('input', function() {
-        this.classList.remove('error');
-    });
+    // 초기 Run 버튼 상태 설정
+    updateRunButtonState();
 
     // --- 베지어 컨트롤 포인트 드래그 기능 추가 ---
     let draggingPoint = null;
@@ -329,6 +351,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (p1 && p2) {
             p1.addEventListener('pointerdown', onPointerDown);
             p2.addEventListener('pointerdown', onPointerDown);
+        }
+    });
+
+    // Zoom out/in controls
+    const zoomOutButton = document.querySelector('.zoom-out');
+    const zoomInButton = document.querySelector('.zoom-in');
+    const animationArea = document.querySelector('.animation-area');
+
+    zoomOutButton.addEventListener('click', () => {
+        if (!animationArea.classList.contains('zoomed-out')) {
+            animationArea.classList.add('zoomed-out');
+        }
+    });
+
+    zoomInButton.addEventListener('click', () => {
+        if (animationArea.classList.contains('zoomed-out')) {
+            animationArea.classList.remove('zoomed-out');
         }
     });
 });
