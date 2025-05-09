@@ -419,6 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const startEasing = document.getElementById('start-easing').value;
         const useEndMotion = document.getElementById('use-end-motion').checked;
         const distance = document.getElementById('preview-distance').value;
+        const selectedDirection = document.getElementById('direction-select').value;
         
         // 시작 easing 값 계산
         let startEasingValue = startEasing;
@@ -434,11 +435,69 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let css = `.your-element {
+    position: absolute;
+    left: 50%;
+    top: 50%;
     transition: all ${startDuration}ms ${startEasingValue};`;
 
-        // slide in 모션인 경우 distance 값 추가
-        if (motionType === 'slide') {
-            css += `\n    transform: translateX(${distance}px);`;
+        // 모션 타입에 따른 초기 상태 설정
+        switch(motionType) {
+            case 'slide':
+                switch(selectedDirection) {
+                    case 'left':
+                        css += `\n    transform: translate(calc(-50% - ${distance}px), -50%);`;
+                        break;
+                    case 'right':
+                        css += `\n    transform: translate(calc(-50% + ${distance}px), -50%);`;
+                        break;
+                    case 'up':
+                        css += `\n    transform: translate(-50%, calc(-50% - ${distance}px));`;
+                        break;
+                    case 'down':
+                        css += `\n    transform: translate(-50%, calc(-50% + ${distance}px));`;
+                        break;
+                }
+                break;
+            case 'fade':
+                css += `\n    opacity: 0;`;
+                if (distance && distance !== '0') {
+                    switch(selectedDirection) {
+                        case 'left':
+                            css += `\n    transform: translate(calc(-50% - ${distance}px), -50%);`;
+                            break;
+                        case 'right':
+                            css += `\n    transform: translate(calc(-50% + ${distance}px), -50%);`;
+                            break;
+                        case 'up':
+                            css += `\n    transform: translate(-50%, calc(-50% - ${distance}px));`;
+                            break;
+                        case 'down':
+                            css += `\n    transform: translate(-50%, calc(-50% + ${distance}px));`;
+                            break;
+                    }
+                } else {
+                    css += `\n    transform: translate(-50%, -50%);`;
+                }
+                break;
+            case 'zoom':
+                css += `\n    transform: translate(-50%, -50%) scale(0);`;
+                if (distance && distance !== '0') {
+                    switch(selectedDirection) {
+                        case 'left':
+                            css += `\n    transform: translate(calc(-50% - ${distance}px), -50%) scale(0);`;
+                            break;
+                        case 'right':
+                            css += `\n    transform: translate(calc(-50% + ${distance}px), -50%) scale(0);`;
+                            break;
+                        case 'up':
+                            css += `\n    transform: translate(-50%, calc(-50% - ${distance}px)) scale(0);`;
+                            break;
+                        case 'down':
+                            css += `\n    transform: translate(-50%, calc(-50% + ${distance}px)) scale(0);`;
+                            break;
+                    }
+                }
+                break;
         }
 
         css += `\n}`;
@@ -466,9 +525,14 @@ document.addEventListener('DOMContentLoaded', function() {
 .your-element.end {
     transition: all ${endDuration}ms ${endEasingValue};`;
 
-            // slide out 모션인 경우 distance 값 추가
-            if (motionEndType === 'slide') {
-                css += `\n    transform: translateX(${distance}px);`;
+            // 끝 모션 타입에 따른 속성 설정
+            switch(motionEndType) {
+                case 'fade':
+                    css += `\n    opacity: 0;`;
+                    break;
+                case 'zoom':
+                    css += `\n    transform: translate(-50%, -50%) scale(0);`;
+                    break;
             }
 
             css += `\n}`;
