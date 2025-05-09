@@ -195,6 +195,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateRunButtonState();
     });
 
+    // Direction controls
+    const directionSelect = document.getElementById('direction-select');
+    let selectedDirection = 'right'; // 기본값
+
+    directionSelect.addEventListener('change', () => {
+        selectedDirection = directionSelect.value;
+    });
+
     button.addEventListener('click', function() {
         const element = document.querySelector('.animated-element');
         const distance = document.getElementById('preview-distance').value;
@@ -225,22 +233,57 @@ document.addEventListener('DOMContentLoaded', function() {
         // 시작 모션 타입에 따른 속성 설정
         switch(motionType) {
             case 'slide':
-                element.style.left = `${100 + parseInt(distance)}px`;
+                switch(selectedDirection) {
+                    case 'left':
+                        element.style.transform = `translate(calc(-50% - ${distance}px), -50%)`;
+                        break;
+                    case 'right':
+                        element.style.transform = `translate(calc(-50% + ${distance}px), -50%)`;
+                        break;
+                    case 'up':
+                        element.style.transform = `translate(-50%, calc(-50% - ${distance}px))`;
+                        break;
+                    case 'down':
+                        element.style.transform = `translate(-50%, calc(-50% + ${distance}px))`;
+                        break;
+                }
                 break;
             case 'fade':
                 element.style.opacity = '1';
                 if (distance && distance !== '0') {
-                    element.style.left = `${100 + parseInt(distance)}px`;
-                } else {
-                    element.style.left = '100px';
+                    switch(selectedDirection) {
+                        case 'left':
+                            element.style.transform = `translate(calc(-50% - ${distance}px), -50%)`;
+                            break;
+                        case 'right':
+                            element.style.transform = `translate(calc(-50% + ${distance}px), -50%)`;
+                            break;
+                        case 'up':
+                            element.style.transform = `translate(-50%, calc(-50% - ${distance}px))`;
+                            break;
+                        case 'down':
+                            element.style.transform = `translate(-50%, calc(-50% + ${distance}px))`;
+                            break;
+                    }
                 }
                 break;
             case 'zoom':
-                element.style.transform = 'translateY(-50%) scale(1)';
+                element.style.transform = 'translate(-50%, -50%) scale(1)';
                 if (distance && distance !== '0') {
-                    element.style.left = `${100 + parseInt(distance)}px`;
-                } else {
-                    element.style.left = '100px';
+                    switch(selectedDirection) {
+                        case 'left':
+                            element.style.transform = `translate(calc(-50% - ${distance}px), -50%) scale(1)`;
+                            break;
+                        case 'right':
+                            element.style.transform = `translate(calc(-50% + ${distance}px), -50%) scale(1)`;
+                            break;
+                        case 'up':
+                            element.style.transform = `translate(-50%, calc(-50% - ${distance}px)) scale(1)`;
+                            break;
+                        case 'down':
+                            element.style.transform = `translate(-50%, calc(-50% + ${distance}px)) scale(1)`;
+                            break;
+                    }
                 }
                 break;
         }
@@ -272,19 +315,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 switch(motionEndType) {
                     case 'fade':
                         element.style.opacity = '0';
-                        if (distance && distance !== '0') {
-                            element.style.left = `${100 + parseInt(distance)}px`;
-                        } else {
-                            element.style.left = '100px';
-                        }
                         break;
                     case 'zoom':
-                        element.style.transform = 'translateY(-50%) scale(0)';
-                        if (distance && distance !== '0') {
-                            element.style.left = `${100 + parseInt(distance)}px`;
-                        } else {
-                            element.style.left = '100px';
-                        }
+                        element.style.transform = 'translate(-50%, -50%) scale(0)';
                         break;
                 }
             }, startDuration);
@@ -373,6 +406,89 @@ document.addEventListener('DOMContentLoaded', function() {
             zoomValue.textContent = '100%';
         }
     });
+
+    // Copy CSS functionality
+    const copyButton = document.querySelector('.copy-button');
+    const copyPopover = document.querySelector('.copy-popover');
+
+    function generateCSS() {
+        const element = document.querySelector('.animated-element');
+        const computedStyle = window.getComputedStyle(element);
+        const motionType = document.getElementById('motion-type').value;
+        const startDuration = document.getElementById('start-duration').value;
+        const startEasing = document.getElementById('start-easing').value;
+        const useEndMotion = document.getElementById('use-end-motion').checked;
+        const distance = document.getElementById('preview-distance').value;
+        
+        // 시작 easing 값 계산
+        let startEasingValue = startEasing;
+        if (startEasing === 'cubic-bezier') {
+            const x1 = document.getElementById('start-bezier-x1').value;
+            const y1 = document.getElementById('start-bezier-y1').value;
+            const x2 = document.getElementById('start-bezier-x2').value;
+            const y2 = document.getElementById('start-bezier-y2').value;
+            startEasingValue = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+        } else {
+            const easingInput = document.getElementById(`start-${startEasing}-value`).querySelector('input');
+            startEasingValue = easingInput.value;
+        }
+
+        let css = `.your-element {
+    transition: all ${startDuration}ms ${startEasingValue};`;
+
+        // slide in 모션인 경우 distance 값 추가
+        if (motionType === 'slide') {
+            css += `\n    transform: translateX(${distance}px);`;
+        }
+
+        css += `\n}`;
+
+        // 끝 애니메이션이 활성화된 경우
+        if (useEndMotion) {
+            const endDuration = document.getElementById('end-duration').value;
+            const endEasing = document.getElementById('end-easing').value;
+            const motionEndType = document.getElementById('motion-end-type').value;
+            
+            // 끝 easing 값 계산
+            let endEasingValue = endEasing;
+            if (endEasing === 'cubic-bezier') {
+                const x1 = document.getElementById('end-bezier-x1').value;
+                const y1 = document.getElementById('end-bezier-y1').value;
+                const x2 = document.getElementById('end-bezier-x2').value;
+                const y2 = document.getElementById('end-bezier-y2').value;
+                endEasingValue = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+            } else {
+                const easingInput = document.getElementById(`end-${endEasing}-value`).querySelector('input');
+                endEasingValue = easingInput.value;
+            }
+
+            css += `\n\n/* End Motion */
+.your-element.end {
+    transition: all ${endDuration}ms ${endEasingValue};`;
+
+            // slide out 모션인 경우 distance 값 추가
+            if (motionEndType === 'slide') {
+                css += `\n    transform: translateX(${distance}px);`;
+            }
+
+            css += `\n}`;
+        }
+
+        return css;
+    }
+
+    copyButton.addEventListener('click', async () => {
+        const css = generateCSS();
+        try {
+            await navigator.clipboard.writeText(css);
+            copyPopover.classList.add('show');
+            setTimeout(() => {
+                copyPopover.classList.remove('show');
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy CSS:', err);
+        }
+    });
 });
 
 function resetAnimationState() {
@@ -385,8 +501,11 @@ function resetAnimationState() {
     // 초기 상태 설정
     element.style.opacity = motionType === 'fade' ? '0' : '1';
     element.style.transform = motionType === 'zoom' ? 'translateY(-50%) scale(0)' : 'translateY(-50%)';
-    element.style.left = '100px';
+    
+    // 초기 위치 설정 (중앙)
+    element.style.left = '50%';
     element.style.top = '50%';
+    element.style.transform = 'translate(-50%, -50%)';
     
     // Force reflow
     void element.offsetHeight;
